@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Customers" EntityType="Model.Store.Customers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Therapists" EntityType="Model.Store.Therapists" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Administors" EntityType="Model.Store.Administors" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Appointments" EntityType="Model.Store.Appointments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="Model.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="AdministorTherapist" Association="Model.Store.AdministorTherapist">
+      <End Role="Administor" EntitySet="Administors" />
+      <End Role="Therapist" EntitySet="Therapists" />
+    </AssociationSet>
+    <AssociationSet Name="AdministorCustomer" Association="Model.Store.AdministorCustomer">
+      <End Role="Administor" EntitySet="Administors" />
+      <End Role="Customer" EntitySet="Customers" />
+    </AssociationSet>
+    <AssociationSet Name="CustomerAppointment" Association="Model.Store.CustomerAppointment">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Appointment" EntitySet="Appointments" />
+    </AssociationSet>
+    <AssociationSet Name="AdministorAppointment" Association="Model.Store.AdministorAppointment">
+      <End Role="Administor" EntitySet="Administors" />
+      <End Role="Appointment" EntitySet="Appointments" />
+    </AssociationSet>
+    <AssociationSet Name="TherapistAppointment" Association="Model.Store.TherapistAppointment">
+      <End Role="Therapist" EntitySet="Therapists" />
+      <End Role="Appointment" EntitySet="Appointments" />
+    </AssociationSet>
+    <AssociationSet Name="TherapistCategory" Association="Model.Store.TherapistCategory">
+      <End Role="Therapist" EntitySet="Therapists" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Date_of_Birth" Type="time" Nullable="false" />
+    <Property Name="AdministorId" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Therapists">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AdministorId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Category_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Administors">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Appointments">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Start_date" Type="time" Nullable="false" />
+    <Property Name="End_date" Type="time" Nullable="false" />
+    <Property Name="IsActivated" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CustomerId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AdministorId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TherapistId" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Duration" Type="int" Nullable="false" />
+    <Property Name="Price" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="AdministorTherapist">
+    <End Role="Administor" Type="Model.Store.Administors" Multiplicity="1" />
+    <End Role="Therapist" Type="Model.Store.Therapists" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Administor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Therapist">
+        <PropertyRef Name="AdministorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AdministorCustomer">
+    <End Role="Administor" Type="Model.Store.Administors" Multiplicity="1" />
+    <End Role="Customer" Type="Model.Store.Customers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Administor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Customer">
+        <PropertyRef Name="AdministorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CustomerAppointment">
+    <End Role="Customer" Type="Model.Store.Customers" Multiplicity="1" />
+    <End Role="Appointment" Type="Model.Store.Appointments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Appointment">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AdministorAppointment">
+    <End Role="Administor" Type="Model.Store.Administors" Multiplicity="1" />
+    <End Role="Appointment" Type="Model.Store.Appointments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Administor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Appointment">
+        <PropertyRef Name="AdministorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TherapistAppointment">
+    <End Role="Therapist" Type="Model.Store.Therapists" Multiplicity="1" />
+    <End Role="Appointment" Type="Model.Store.Appointments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Therapist">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Appointment">
+        <PropertyRef Name="TherapistId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TherapistCategory">
+    <End Role="Therapist" Type="Model.Store.Therapists" Multiplicity="*" />
+    <End Role="Category" Type="Model.Store.Categories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Therapist">
+        <PropertyRef Name="Category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
